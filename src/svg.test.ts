@@ -114,7 +114,7 @@ describe('generateSvg', () => {
   it('should include ring around current streak', () => {
     const svg = generateSvg(defaultStats, defaultOptions);
     expect(svg).toContain('<circle');
-    expect(svg).toContain('r="40"');
+    expect(svg).toContain('r="32"');
   });
 
   it('should show N/A for longest streak when null dates', () => {
