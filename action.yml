@@ -1,0 +1,75 @@
+name: 'GitHub Streak Stats'
+description: 'Generate streak stats SVG for your GitHub profile README'
+author: 'Jerome Ramette'
+
+branding:
+  icon: 'activity'
+  color: 'orange'
+
+inputs:
+  username:
+    description: 'GitHub username to generate stats for'
+    required: true
+  token:
+    description: 'GitHub token for API access'
+    required: true
+  output-path:
+    description: 'Path to save the generated SVG'
+    required: false
+    default: 'streak-stats.svg'
+  theme:
+    description: 'Theme for the SVG (default, dark)'
+    required: false
+    default: 'default'
+  hide-border:
+    description: 'Hide the border around the card'
+    required: false
+    default: 'false'
+  background:
+    description: 'Custom background color (hex without #)'
+    required: false
+    default: ''
+  stroke:
+    description: 'Custom border color (hex without #)'
+    required: false
+    default: ''
+  ring:
+    description: 'Custom ring color (hex without #)'
+    required: false
+    default: ''
+  fire:
+    description: 'Custom fire/streak color (hex without #)'
+    required: false
+    default: ''
+  currStreakNum:
+    description: 'Custom current streak number color (hex without #)'
+    required: false
+    default: ''
+  sideNums:
+    description: 'Custom side numbers color (hex without #)'
+    required: false
+    default: ''
+  currStreakLabel:
+    description: 'Custom current streak label color (hex without #)'
+    required: false
+    default: ''
+  sideLabels:
+    description: 'Custom side labels color (hex without #)'
+    required: false
+    default: ''
+  dates:
+    description: 'Custom dates color (hex without #)'
+    required: false
+    default: ''
+
+outputs:
+  total-contributions:
+    description: 'Total contributions count'
+  current-streak:
+    description: 'Current streak in days'
+  longest-streak:
+    description: 'Longest streak in days'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
