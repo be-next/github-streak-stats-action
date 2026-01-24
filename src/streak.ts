@@ -63,7 +63,7 @@ export async function fetchStreakStats(
   return calculateStreaks(allDays, calendar.totalContributions);
 }
 
-function calculateStreaks(
+export function calculateStreaks(
   days: ContributionDay[],
   totalContributions: number
 ): StreakStats {

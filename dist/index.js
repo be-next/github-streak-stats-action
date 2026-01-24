@@ -30071,6 +30071,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.fetchStreakStats = fetchStreakStats;
+exports.calculateStreaks = calculateStreaks;
 const github = __importStar(__nccwpck_require__(3228));
 const CONTRIBUTIONS_QUERY = `
   query($username: String!) {
