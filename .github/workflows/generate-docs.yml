@@ -1,0 +1,92 @@
+name: Generate Theme Examples
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/themes.ts'
+      - 'src/svg.ts'
+
+jobs:
+  generate-examples:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate default theme
+        uses: ./
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          theme: default
+          output-path: doc/theme-default.svg
+
+      - name: Generate dark theme
+        uses: ./
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          theme: dark
+          output-path: doc/theme-dark.svg
+
+      - name: Generate radical theme
+        uses: ./
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          theme: radical
+          output-path: doc/theme-radical.svg
+
+      - name: Generate tokyonight theme
+        uses: ./
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          theme: tokyonight
+          output-path: doc/theme-tokyonight.svg
+
+      - name: Generate gruvbox theme
+        uses: ./
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          theme: gruvbox
+          output-path: doc/theme-gruvbox.svg
+
+      - name: Generate dracula theme
+        uses: ./
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          theme: dracula
+          output-path: doc/theme-dracula.svg
+
+      - name: Generate nord theme
+        uses: ./
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          theme: nord
+          output-path: doc/theme-nord.svg
+
+      - name: Generate hide-border example
+        uses: ./
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          theme: default
+          hide-border: 'true'
+          output-path: doc/option-hide-border.svg
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add doc/*.svg
+          git diff --staged --quiet || git commit -m "Update theme example images"
+          git push
