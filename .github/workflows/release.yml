@@ -14,29 +14,32 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Generate release notes
-        id: notes
+      - name: Update README if major version changed
         run: |
           TAG=${GITHUB_REF#refs/tags/}
-          PREV_TAG=$(git describe --tags --abbrev=0 $TAG^ 2>/dev/null || echo "")
+          MAJOR=$(echo $TAG | cut -d. -f1)
 
-          if [ -n "$PREV_TAG" ]; then
-            echo "Generating changelog from $PREV_TAG to $TAG"
-            COMMITS=$(git log --pretty=format:"- %s" $PREV_TAG..$TAG)
+          # Get current major version from README
+          CURRENT=$(grep -oP 'github-streak-stats-action@v\K[0-9]+' README.md | head -1 || echo "")
+
+          if [ -n "$CURRENT" ] && [ "$CURRENT" != "${MAJOR#v}" ]; then
+            echo "Updating README from v$CURRENT to $MAJOR"
+
+            # Update all references in README
+            sed -i "s/github-streak-stats-action@v$CURRENT/github-streak-stats-action@$MAJOR/g" README.md
+
+            # Commit and push to main branch
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add README.md
+            git commit -m "Update README to use $MAJOR"
+            git push origin HEAD:main
           else
-            echo "No previous tag found, using all commits"
-            COMMITS=$(git log --pretty=format:"- %s")
+            echo "README already up to date with $MAJOR"
           fi
-
-          # Write to file to handle multiline
-          cat > release_notes.md << EOF
-          ## What's Changed
-
-          $COMMITS
-
-          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG:-initial}...$TAG
-          EOF
 
       - name: Create release
         uses: softprops/action-gh-release@v2
