@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Generate streak stats (light)
-        uses: be-next/github-streak-stats-action@v0
+        uses: be-next/github-streak-stats-action@v1
         with:
           username: ${{ github.repository_owner }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
           hide-border: true
 
       - name: Generate streak stats (dark)
-        uses: be-next/github-streak-stats-action@v0
+        uses: be-next/github-streak-stats-action@v1
         with:
           username: ${{ github.repository_owner }}
           token: ${{ secrets.GITHUB_TOKEN }}
