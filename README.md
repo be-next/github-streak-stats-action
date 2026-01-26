@@ -1,6 +1,13 @@
 # GitHub Streak Stats Action
 
+[![Generate Docs](https://github.com/be-next/github-streak-stats-action/actions/workflows/generate-docs.yml/badge.svg)](https://github.com/be-next/github-streak-stats-action/actions/workflows/generate-docs.yml)
+[![GitHub release](https://img.shields.io/github/v/release/be-next/github-streak-stats-action)](https://github.com/be-next/github-streak-stats-action/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub last commit](https://img.shields.io/github/last-commit/be-next/github-streak-stats-action)](https://github.com/be-next/github-streak-stats-action/commits/main)
+
 Generate streak stats SVG for your GitHub profile README.
+
+![GitHub Streak Stats](doc/theme-default.svg)
 
 ## Features
 
@@ -92,13 +99,31 @@ Override any theme color using these inputs (hex values without `#`):
 
 ## Themes
 
-- `default` - Light theme
-- `dark` - Dark theme with black background
-- `radical` - Pink/purple theme
-- `tokyonight` - Tokyo Night theme
-- `gruvbox` - Gruvbox theme
-- `dracula` - Dracula theme
-- `nord` - Nord theme
+### default
+![default theme](doc/theme-default.svg)
+
+### dark
+![dark theme](doc/theme-dark.svg)
+
+### radical
+![radical theme](doc/theme-radical.svg)
+
+### tokyonight
+![tokyonight theme](doc/theme-tokyonight.svg)
+
+### gruvbox
+![gruvbox theme](doc/theme-gruvbox.svg)
+
+### dracula
+![dracula theme](doc/theme-dracula.svg)
+
+### nord
+![nord theme](doc/theme-nord.svg)
+
+## Options
+
+### hide-border
+![hide-border option](doc/option-hide-border.svg)
 
 ## License
 
