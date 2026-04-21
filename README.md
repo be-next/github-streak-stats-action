@@ -1,5 +1,6 @@
 # GitHub Streak Stats Action
 
+[![CI](https://github.com/be-next/github-streak-stats-action/actions/workflows/ci.yml/badge.svg)](https://github.com/be-next/github-streak-stats-action/actions/workflows/ci.yml)
 [![Generate Docs](https://github.com/be-next/github-streak-stats-action/actions/workflows/generate-docs.yml/badge.svg)](https://github.com/be-next/github-streak-stats-action/actions/workflows/generate-docs.yml)
 [![GitHub release](https://img.shields.io/github/v/release/be-next/github-streak-stats-action)](https://github.com/be-next/github-streak-stats-action/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
