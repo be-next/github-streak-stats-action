@@ -39,6 +39,6 @@
     "typescript-eslint": "^8.59.0"
   },
   "overrides": {
-    "undici": "^6.23.0"
+    "undici": "^8.0.0"
   }
 }
