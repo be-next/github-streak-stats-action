@@ -71,11 +71,11 @@ export function generateSvg(stats: StreakStats, options: SvgOptions): string {
 
   <!-- Current Streak -->
   <g transform="translate(197, 20)">
-    <!-- Fire icon -->
+    <circle cx="50" cy="48" r="32" fill="none" stroke="#${colors.ring}" stroke-width="5"/>
+    <!-- Fire icon (must stay after the ring: SVG paint order) -->
     <svg x="35" y="0" width="30" height="30" viewBox="0 0 24 24">
       <path class="fire" d="M12 23C7.02944 23 3 18.9706 3 14C3 9.5 6 6 8 4C8 8 10 9 11 8C11 5 13 2 16 1C15 4 17 6 19 7C21 8.5 21 11 21 14C21 18.9706 16.9706 23 12 23Z"/>
     </svg>
-    <circle cx="50" cy="48" r="32" fill="none" stroke="#${colors.ring}" stroke-width="5"/>
     <text class="stat-number" fill="#${colors.currStreakNum}" text-anchor="middle" x="50" y="56">${stats.currentStreak}</text>
     <text class="stat-label" fill="#${colors.currStreakLabel}" text-anchor="middle" x="50" y="100">Current Streak</text>
     <text class="date-range" text-anchor="middle" x="50" y="118">${currentStreakDates || 'No active streak'}</text>
