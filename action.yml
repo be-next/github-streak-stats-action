@@ -71,8 +71,16 @@ outputs:
     description: 'Total contributions count'
   current-streak:
     description: 'Current streak in days'
+  current-streak-start:
+    description: 'Start date of the current streak (YYYY-MM-DD), empty if no active streak'
+  current-streak-end:
+    description: 'End date of the current streak (YYYY-MM-DD), empty if no active streak'
   longest-streak:
     description: 'Longest streak in days'
+  longest-streak-start:
+    description: 'Start date of the longest streak (YYYY-MM-DD), empty if zero'
+  longest-streak-end:
+    description: 'End date of the longest streak (YYYY-MM-DD), empty if zero'
 
 runs:
   using: 'node24'

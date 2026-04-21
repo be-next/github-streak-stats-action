@@ -19945,6 +19945,9 @@ function setFailed(message) {
 function error(message, properties = {}) {
   issueCommand("error", toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
+function warning(message, properties = {}) {
+  issueCommand("warning", toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+}
 function info(message) {
   process.stdout.write(message + os4.EOL);
 }
@@ -23930,6 +23933,11 @@ async function run() {
     const theme = getInput("theme") || "default";
     const timezone = getInput("timezone") || "UTC";
     const hideBorder = getInput("hide-border") === "true";
+    if (!(theme in themes)) {
+      warning(
+        `Unknown theme '${theme}'. Falling back to 'default'. Available themes: ${Object.keys(themes).join(", ")}`
+      );
+    }
     const background = getInput("background") || void 0;
     const stroke = getInput("stroke") || void 0;
     const ring = getInput("ring") || void 0;
@@ -23965,7 +23973,11 @@ async function run() {
     info(`SVG written to ${outputPath}`);
     setOutput("total-contributions", stats.totalContributions.toString());
     setOutput("current-streak", stats.currentStreak.toString());
+    setOutput("current-streak-start", stats.currentStreakStart ?? "");
+    setOutput("current-streak-end", stats.currentStreakEnd ?? "");
     setOutput("longest-streak", stats.longestStreak.toString());
+    setOutput("longest-streak-start", stats.longestStreakStart ?? "");
+    setOutput("longest-streak-end", stats.longestStreakEnd ?? "");
   } catch (error2) {
     if (error2 instanceof Error) {
       setFailed(error2.message);

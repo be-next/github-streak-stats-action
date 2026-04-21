@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fetchStreakStats } from './streak.js';
 import { generateSvg } from './svg.js';
+import { themes } from './themes.js';
 
 async function run(): Promise<void> {
   try {
@@ -13,6 +14,12 @@ async function run(): Promise<void> {
     const theme = core.getInput('theme') || 'default';
     const timezone = core.getInput('timezone') || 'UTC';
     const hideBorder = core.getInput('hide-border') === 'true';
+
+    if (!(theme in themes)) {
+      core.warning(
+        `Unknown theme '${theme}'. Falling back to 'default'. Available themes: ${Object.keys(themes).join(', ')}`
+      );
+    }
 
     // Custom color overrides
     const background = core.getInput('background') || undefined;
@@ -62,7 +69,11 @@ async function run(): Promise<void> {
     // Set outputs
     core.setOutput('total-contributions', stats.totalContributions.toString());
     core.setOutput('current-streak', stats.currentStreak.toString());
+    core.setOutput('current-streak-start', stats.currentStreakStart ?? '');
+    core.setOutput('current-streak-end', stats.currentStreakEnd ?? '');
     core.setOutput('longest-streak', stats.longestStreak.toString());
+    core.setOutput('longest-streak-start', stats.longestStreakStart ?? '');
+    core.setOutput('longest-streak-end', stats.longestStreakEnd ?? '');
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);
