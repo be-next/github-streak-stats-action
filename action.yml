@@ -21,6 +21,10 @@ inputs:
     description: 'Theme for the SVG (default, dark)'
     required: false
     default: 'default'
+  timezone:
+    description: 'IANA timezone used to resolve "today" and "yesterday" for the current streak (e.g. Europe/Paris, America/New_York). Defaults to UTC.'
+    required: false
+    default: 'UTC'
   hide-border:
     description: 'Hide the border around the card'
     required: false

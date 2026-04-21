@@ -23699,16 +23699,32 @@ var CONTRIBUTIONS_QUERY = `
     }
   }
 `;
-async function fetchStreakStats(username, token) {
+async function fetchStreakStats(username, token, options = {}) {
   const octokit = getOctokit(token);
-  const response = await octokit.graphql(CONTRIBUTIONS_QUERY, {
-    username
-  });
+  const response = await octokit.graphql(
+    CONTRIBUTIONS_QUERY,
+    { username }
+  );
+  if (!response.user) {
+    throw new Error(`GitHub user '${username}' not found`);
+  }
   const calendar = response.user.contributionsCollection.contributionCalendar;
   const allDays = calendar.weeks.flatMap((week) => week.contributionDays).sort((a, b) => a.date.localeCompare(b.date));
-  return calculateStreaks(allDays, calendar.totalContributions);
+  return calculateStreaks(allDays, calendar.totalContributions, options);
 }
-function calculateStreaks(days, totalContributions) {
+function formatYMD(date, timezone) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: timezone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(date);
+}
+function calculateStreaks(days, totalContributions, options = {}) {
+  const timezone = options.timezone ?? "UTC";
+  const now = options.now ?? /* @__PURE__ */ new Date();
+  const today = formatYMD(now, timezone);
+  const yesterday = formatYMD(new Date(now.getTime() - 864e5), timezone);
   let currentStreak = 0;
   let longestStreak = 0;
   let currentStreakStart = null;
@@ -23717,10 +23733,7 @@ function calculateStreaks(days, totalContributions) {
   let longestStreakEnd = null;
   let tempStreak = 0;
   let tempStreakStart = null;
-  const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
-  const yesterday = new Date(Date.now() - 864e5).toISOString().split("T")[0];
-  for (let i = 0; i < days.length; i++) {
-    const day = days[i];
+  for (const day of days) {
     if (day.contributionCount > 0) {
       if (tempStreak === 0) {
         tempStreakStart = day.date;
@@ -23915,6 +23928,7 @@ async function run() {
     const token = getInput("token", { required: true });
     const outputPath = getInput("output-path") || "streak-stats.svg";
     const theme = getInput("theme") || "default";
+    const timezone = getInput("timezone") || "UTC";
     const hideBorder = getInput("hide-border") === "true";
     const background = getInput("background") || void 0;
     const stroke = getInput("stroke") || void 0;
@@ -23926,7 +23940,7 @@ async function run() {
     const sideLabels = getInput("sideLabels") || void 0;
     const dates = getInput("dates") || void 0;
     info(`Fetching streak stats for ${username}...`);
-    const stats = await fetchStreakStats(username, token);
+    const stats = await fetchStreakStats(username, token, { timezone });
     info(`Total contributions: ${stats.totalContributions}`);
     info(`Current streak: ${stats.currentStreak} days`);
     info(`Longest streak: ${stats.longestStreak} days`);

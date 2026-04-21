@@ -130,4 +130,41 @@ describe('calculateStreaks', () => {
     const result = calculateStreaks(days, 1234);
     expect(result.totalContributions).toBe(1234);
   });
+
+  describe('timezone handling', () => {
+    // 2024-01-15 23:30 UTC -> 2024-01-16 in Europe/Paris, 2024-01-15 in America/New_York
+    const lateUtc = new Date('2024-01-15T23:30:00Z');
+
+    it('should treat today as the Paris date when timezone=Europe/Paris', () => {
+      const days = [
+        { date: '2024-01-15', contributionCount: 1 },
+        { date: '2024-01-16', contributionCount: 1 },
+      ];
+      const result = calculateStreaks(days, 2, {
+        timezone: 'Europe/Paris',
+        now: lateUtc,
+      });
+      expect(result.currentStreak).toBe(2);
+      expect(result.currentStreakEnd).toBe('2024-01-16');
+    });
+
+    it('should treat today as the New York date when timezone=America/New_York', () => {
+      const days = [
+        { date: '2024-01-14', contributionCount: 1 },
+        { date: '2024-01-15', contributionCount: 1 },
+      ];
+      const result = calculateStreaks(days, 2, {
+        timezone: 'America/New_York',
+        now: lateUtc,
+      });
+      expect(result.currentStreak).toBe(2);
+      expect(result.currentStreakEnd).toBe('2024-01-15');
+    });
+
+    it('should default to UTC when no timezone is provided', () => {
+      const days = [{ date: '2024-01-15', contributionCount: 1 }];
+      const result = calculateStreaks(days, 1, { now: lateUtc });
+      expect(result.currentStreakEnd).toBe('2024-01-15');
+    });
+  });
 });

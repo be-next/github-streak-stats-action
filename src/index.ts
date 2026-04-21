@@ -11,6 +11,7 @@ async function run(): Promise<void> {
     const token = core.getInput('token', { required: true });
     const outputPath = core.getInput('output-path') || 'streak-stats.svg';
     const theme = core.getInput('theme') || 'default';
+    const timezone = core.getInput('timezone') || 'UTC';
     const hideBorder = core.getInput('hide-border') === 'true';
 
     // Custom color overrides
@@ -27,7 +28,7 @@ async function run(): Promise<void> {
     core.info(`Fetching streak stats for ${username}...`);
 
     // Fetch streak stats from GitHub
-    const stats = await fetchStreakStats(username, token);
+    const stats = await fetchStreakStats(username, token, { timezone });
 
     core.info(`Total contributions: ${stats.totalContributions}`);
     core.info(`Current streak: ${stats.currentStreak} days`);

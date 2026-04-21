@@ -14,6 +14,14 @@ interface ContributionCalendar {
   weeks: ContributionWeek[];
 }
 
+interface ContributionsResponse {
+  user: {
+    contributionsCollection: {
+      contributionCalendar: ContributionCalendar;
+    };
+  } | null;
+}
+
 export interface StreakStats {
   totalContributions: number;
   currentStreak: number;
@@ -22,6 +30,11 @@ export interface StreakStats {
   currentStreakEnd: string | null;
   longestStreakStart: string | null;
   longestStreakEnd: string | null;
+}
+
+export interface StreakOptions {
+  timezone?: string;
+  now?: Date;
 }
 
 const CONTRIBUTIONS_QUERY = `
@@ -44,29 +57,48 @@ const CONTRIBUTIONS_QUERY = `
 
 export async function fetchStreakStats(
   username: string,
-  token: string
+  token: string,
+  options: StreakOptions = {}
 ): Promise<StreakStats> {
   const octokit = github.getOctokit(token);
 
-  const response: any = await octokit.graphql(CONTRIBUTIONS_QUERY, {
-    username,
-  });
+  const response = await octokit.graphql<ContributionsResponse>(
+    CONTRIBUTIONS_QUERY,
+    { username }
+  );
 
-  const calendar: ContributionCalendar =
-    response.user.contributionsCollection.contributionCalendar;
+  if (!response.user) {
+    throw new Error(`GitHub user '${username}' not found`);
+  }
 
-  // Flatten all contribution days and sort by date
+  const calendar = response.user.contributionsCollection.contributionCalendar;
+
   const allDays: ContributionDay[] = calendar.weeks
     .flatMap((week) => week.contributionDays)
     .sort((a, b) => a.date.localeCompare(b.date));
 
-  return calculateStreaks(allDays, calendar.totalContributions);
+  return calculateStreaks(allDays, calendar.totalContributions, options);
+}
+
+function formatYMD(date: Date, timezone: string): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
 }
 
 export function calculateStreaks(
   days: ContributionDay[],
-  totalContributions: number
+  totalContributions: number,
+  options: StreakOptions = {}
 ): StreakStats {
+  const timezone = options.timezone ?? 'UTC';
+  const now = options.now ?? new Date();
+  const today = formatYMD(now, timezone);
+  const yesterday = formatYMD(new Date(now.getTime() - 86400000), timezone);
+
   let currentStreak = 0;
   let longestStreak = 0;
   let currentStreakStart: string | null = null;
@@ -77,27 +109,19 @@ export function calculateStreaks(
   let tempStreak = 0;
   let tempStreakStart: string | null = null;
 
-  const today = new Date().toISOString().split('T')[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-
-  // Calculate streaks
-  for (let i = 0; i < days.length; i++) {
-    const day = days[i];
-
+  for (const day of days) {
     if (day.contributionCount > 0) {
       if (tempStreak === 0) {
         tempStreakStart = day.date;
       }
       tempStreak++;
 
-      // Check if this is the current streak (ends today or yesterday)
       if (day.date === today || day.date === yesterday) {
         currentStreak = tempStreak;
         currentStreakStart = tempStreakStart;
         currentStreakEnd = day.date;
       }
 
-      // Update longest streak
       if (tempStreak > longestStreak) {
         longestStreak = tempStreak;
         longestStreakStart = tempStreakStart;
@@ -109,7 +133,6 @@ export function calculateStreaks(
     }
   }
 
-  // If current streak ended before yesterday, reset it
   if (currentStreakEnd && currentStreakEnd !== today && currentStreakEnd !== yesterday) {
     currentStreak = 0;
     currentStreakStart = null;
