@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "dependencyDashboard": true,
+  "packageRules": [
+    {
+      "description": "Major bumps must be approved from the dashboard",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Group the @actions/* toolkit together",
+      "matchPackageNames": ["@actions/**"],
+      "groupName": "actions toolkit"
+    },
+    {
+      "description": "Group jest + ts-jest + @types/jest",
+      "matchPackageNames": ["jest", "ts-jest", "@types/jest", "jest-*"],
+      "groupName": "jest"
+    }
+  ]
+}

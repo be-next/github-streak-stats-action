@@ -1,11 +1,9 @@
 import { jest, describe, it, expect, beforeAll, afterAll } from '@jest/globals';
-import { calculateStreaks, StreakStats } from './streak.js';
+import { calculateStreaks } from './streak.js';
 
 describe('calculateStreaks', () => {
   // Mock current date for deterministic tests
   const mockDate = new Date('2024-01-15T12:00:00Z');
-  const today = '2024-01-15';
-  const yesterday = '2024-01-14';
 
   beforeAll(() => {
     jest.useFakeTimers();
