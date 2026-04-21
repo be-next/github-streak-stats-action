@@ -34,7 +34,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Generate streak stats (light)
         uses: be-next/github-streak-stats-action@v1
@@ -70,7 +70,8 @@ jobs:
 | `username` | GitHub username | Yes | - |
 | `token` | GitHub token for API access | Yes | - |
 | `output-path` | Path to save the SVG | No | `streak-stats.svg` |
-| `theme` | Theme name | No | `default` |
+| `theme` | Theme name (`default`, `dark`, `radical`, `tokyonight`, `gruvbox`, `dracula`, `nord`) | No | `default` |
+| `timezone` | IANA timezone used to resolve "today" and "yesterday" for the current streak (e.g. `Europe/Paris`, `America/New_York`) | No | `UTC` |
 | `hide-border` | Hide card border | No | `false` |
 
 ### Custom Colors
@@ -95,7 +96,11 @@ Override any theme color using these inputs (hex values without `#`):
 |--------|-------------|
 | `total-contributions` | Total contributions count |
 | `current-streak` | Current streak in days |
+| `current-streak-start` | Start date of the current streak (`YYYY-MM-DD`), empty if no active streak |
+| `current-streak-end` | End date of the current streak (`YYYY-MM-DD`), empty if no active streak |
 | `longest-streak` | Longest streak in days |
+| `longest-streak-start` | Start date of the longest streak (`YYYY-MM-DD`), empty if zero |
+| `longest-streak-end` | End date of the longest streak (`YYYY-MM-DD`), empty if zero |
 
 ## Themes
 
