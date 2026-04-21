@@ -1,4 +1,5 @@
-import { calculateStreaks, StreakStats } from './streak';
+import { jest, describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { calculateStreaks, StreakStats } from './streak.js';
 
 describe('calculateStreaks', () => {
   // Mock current date for deterministic tests

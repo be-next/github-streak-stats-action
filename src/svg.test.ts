@@ -1,5 +1,5 @@
-import { generateSvg, SvgOptions } from './svg';
-import { StreakStats } from './streak';
+import { generateSvg, SvgOptions } from './svg.js';
+import { StreakStats } from './streak.js';
 
 describe('generateSvg', () => {
   const defaultStats: StreakStats = {

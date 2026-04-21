@@ -1,5 +1,5 @@
-import { StreakStats } from './streak';
-import { Theme, getTheme } from './themes';
+import { StreakStats } from './streak.js';
+import { Theme, getTheme } from './themes.js';
 
 export interface SvgOptions {
   theme: string;

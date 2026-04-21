@@ -71,5 +71,5 @@ outputs:
     description: 'Longest streak in days'
 
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'

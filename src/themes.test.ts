@@ -1,4 +1,4 @@
-import { getTheme, themes, Theme } from './themes';
+import { getTheme, themes, Theme } from './themes.js';
 
 describe('themes', () => {
   describe('getTheme', () => {

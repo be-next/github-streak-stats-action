@@ -1,5 +1,5 @@
-import { fetchStreakStats } from './src/streak';
-import { generateSvg } from './src/svg';
+import { fetchStreakStats } from './src/streak.js';
+import { generateSvg } from './src/svg.js';
 import * as fs from 'fs';
 
 async function main() {

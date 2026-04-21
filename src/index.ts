@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
 import * as fs from 'fs';
 import * as path from 'path';
-import { fetchStreakStats } from './streak';
-import { generateSvg } from './svg';
+import { fetchStreakStats } from './streak.js';
+import { generateSvg } from './svg.js';
 
 async function run(): Promise<void> {
   try {
